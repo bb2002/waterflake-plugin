@@ -1,0 +1,4 @@
+name: WaterflakePlugin
+version: '${version}'
+main: co.waterflake.WaterflakeClient
+api-version: 1.18
