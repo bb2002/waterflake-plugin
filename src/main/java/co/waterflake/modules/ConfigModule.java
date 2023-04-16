@@ -2,6 +2,7 @@ package co.waterflake.modules;
 
 import co.waterflake.WaterflakeClient;
 import co.waterflake.types.ClientInfo;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.File;
@@ -25,6 +26,10 @@ public class ConfigModule {
         String clientSecret = config.getString("Authenticate.ClientSecret");
 
         return new ClientInfo(clientId, clientSecret);
+    }
+
+    public int getMaxPlayers() {
+        return Bukkit.getServer().getMaxPlayers();
     }
 
     public static ConfigModule getInstance(WaterflakeClient context) {
