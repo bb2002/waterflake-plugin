@@ -1,4 +1,4 @@
 name: WaterflakePlugin
 version: 'v0.1'
-main: co.waterflake.WaterflakeClient
+main: co.waterflake.Main
 api-version: 1.18

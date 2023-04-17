@@ -1,27 +1,23 @@
-package co.waterflake.modules;
+package co.waterflake.modules.authenticate;
 
 import co.waterflake.libs.WaterflakeAPI;
 import co.waterflake.libs.WaterflakeHttp;
+import co.waterflake.modules.Context;
 import co.waterflake.types.ClientInfo;
 import co.waterflake.types.Tunnel;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import okhttp3.*;
+import okhttp3.Response;
 
 import java.util.Objects;
 
-public class AuthenticateModule {
-    private static AuthenticateModule instance = null;
+public class AuthenticateService {
+    private Context context = null;
+
     private Tunnel currentTunnel = null;
 
-    private AuthenticateModule() {}
-
-    public static AuthenticateModule getInstance() {
-        if (AuthenticateModule.instance == null) {
-            AuthenticateModule.instance = new AuthenticateModule();
-        }
-
-        return AuthenticateModule.instance;
+    public AuthenticateService(Context context) {
+        this.context = context;
     }
 
     public Tunnel login(ClientInfo clientInfo) {
