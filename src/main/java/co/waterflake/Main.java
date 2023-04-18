@@ -48,11 +48,27 @@ public class Main extends JavaPlugin implements Listener, OnServerListen {
 
     @Override
     public void successful() {
+        TunnelService tunnelService = this.context.getTunnelService();
 
+        ConfigService configService = this.context.getConfigService();
+        int maxPlayers = configService.getMaxPlayers();
+        int serverPort = configService.getServerPort();
+
+        if (maxPlayers > 75) {
+            maxPlayers = 75;
+            getLogger().warning("Waterflake supports up to 75 players.");
+            getLogger().warning("The max-players setting in server.properties may not work properly.");
+        }
+
+//        for (int i = 0; i < maxPlayers; i++) {
+//            tunnelService.spawn(serverPort);
+//        }
+        tunnelService.startTunneling(3);
     }
 
     @Override
     public void timeout() {
-
+        getLogger().warning("Waterflake failed to connect to the game server.");
+        getLogger().warning("Please make sure that the server is hosted as localhost and that the plugin can connect.");
     }
 }

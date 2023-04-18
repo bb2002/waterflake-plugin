@@ -9,4 +9,5 @@ public class Tunnel {
     public String rootDomain;
     public int inPort;
     public int outPort;
+    public Region region;
 }

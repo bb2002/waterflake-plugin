@@ -1,9 +1,10 @@
 package co.waterflake.modules.authenticate;
 
-import co.waterflake.libs.WaterflakeAPI;
+import co.waterflake.constants.WaterflakeAPI;
 import co.waterflake.libs.WaterflakeHttp;
 import co.waterflake.modules.Context;
 import co.waterflake.types.ClientInfo;
+import co.waterflake.types.Region;
 import co.waterflake.types.Tunnel;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -47,6 +48,11 @@ public class AuthenticateService {
 
     private Tunnel parsingLoginResult(String body) {
         JsonObject jsonObject = JsonParser.parseString(body).getAsJsonObject();
+        JsonObject regionObject = jsonObject.getAsJsonObject("region");
+
+        Region region = new Region();
+        region.name = regionObject.get("name").getAsString();
+        region.SRVTarget = regionObject.get("SRVTarget").getAsString();
 
         Tunnel tunnel = new Tunnel();
         tunnel._id = jsonObject.get("_id").getAsInt();
@@ -55,6 +61,7 @@ public class AuthenticateService {
         tunnel.rootDomain = jsonObject.get("rootDomain").getAsString();
         tunnel.inPort = jsonObject.get("inPort").getAsInt();
         tunnel.outPort = jsonObject.get("outPort").getAsInt();
+        tunnel.region = region;
 
         return tunnel;
     }
