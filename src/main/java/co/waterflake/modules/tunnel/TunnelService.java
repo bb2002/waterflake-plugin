@@ -32,8 +32,7 @@ public class TunnelService {
 
     public void startTunneling(int tunnelCount) {
         for (int i = 0; i < tunnelCount; i++) {
-            int newConnectionId = this.spawn();
-            this.context.getJavaPluginContext().getLogger().info("터널 시작.. ID: " + newConnectionId);
+           this.spawn();
         }
     }
 
@@ -57,7 +56,7 @@ public class TunnelService {
         this.tunnelObserverThread.interrupt();
     }
 
-    public int spawn() {
+    public void spawn() {
         AuthenticateService authenticateService = this.context.getAuthenticateService();
         ConfigService configService = this.context.getConfigService();
 
@@ -71,17 +70,13 @@ public class TunnelService {
         );
 
         try {
-            int connId = this.getNextConnectionId();
             TunnelThread thread = new TunnelThread(params);
             thread.start();
-            this.tunnelThreads.put(connId, thread);
+            this.tunnelThreads.put(this.getNextConnectionId(), thread);
 
-            return connId;
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
-        return -1;
     }
 
     public int getNextConnectionId() {

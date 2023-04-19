@@ -7,7 +7,11 @@ import co.waterflake.modules.tunnel.OnServerListen;
 import co.waterflake.modules.tunnel.TunnelService;
 import co.waterflake.types.ClientInfo;
 import co.waterflake.types.Tunnel;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin implements Listener, OnServerListen {
@@ -33,6 +37,11 @@ public class Main extends JavaPlugin implements Listener, OnServerListen {
         }
     }
 
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        event.getPlayer().sendMessage(ChatColor.AQUA + "[WaterflakeTunnel] " + ChatColor.WHITE + "이 서버는 Waterflake 에 의해 호스팅 되고 있습니다.");
+    }
+
     private void bootstrap() {
         AuthenticateService authenticateService = this.context.getAuthenticateService();
         ConfigService configService = this.context.getConfigService();
@@ -40,7 +49,7 @@ public class Main extends JavaPlugin implements Listener, OnServerListen {
 
         ClientInfo clientInfo = configService.getClientInfo();
         if (clientInfo.getClientId().isEmpty() || clientInfo.getClientSecret().isEmpty()) {
-            getLogger().warning("config.yml 파일에 Waterflake Client 인증 정보를 입력해주세요.");
+            getLogger().warning(Color.RED + "config.yml 파일에 Waterflake Client 인증 정보를 입력해주세요.");
             return;
         }
 
@@ -51,7 +60,7 @@ public class Main extends JavaPlugin implements Listener, OnServerListen {
             return;
         }
 
-        getLogger().info("로그인 되었습니다. 서버가 활성화를 기다리는 중...");
+        getLogger().info("로그인 되었습니다. 서버 활성화를 기다리는 중...");
         tunnelService.onServerListenEvent(this);
     }
 
