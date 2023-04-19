@@ -30,6 +30,15 @@ public class TunnelThread {
         (new Thread(new RunnableImpl(this.remoteSocket, this.localSocket))).start();
     }
 
+    public void stop() {
+        try {
+            this.localSocket.close();
+        } catch (IOException ignored){}
+        try {
+            this.remoteSocket.close();
+        } catch (IOException ignored){}
+    }
+
     public boolean isSocketClosed() {
         return this.localSocket.isClosed() || this.remoteSocket.isClosed();
     }
@@ -56,7 +65,6 @@ class RunnableImpl implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("start RUN()");
         try {
             InputStream input = inSocket.getInputStream();
             OutputStream output = outSocket.getOutputStream();
@@ -65,11 +73,8 @@ class RunnableImpl implements Runnable {
             int length;
             while ((length = input.read(buffer)) > 0) {
                 output.write(buffer, 0, length);
-                System.out.println("Write byte " + length);
             }
-        } catch (Exception ignored) {
-            ignored.printStackTrace();
-        } finally {
+        } catch (Exception ignored) {} finally {
             try {
                 inSocket.close();
             } catch (IOException ignored){}
@@ -77,6 +82,5 @@ class RunnableImpl implements Runnable {
                 outSocket.close();
             } catch (IOException ignored){}
         }
-        System.out.println("end RUN()");
     }
 }

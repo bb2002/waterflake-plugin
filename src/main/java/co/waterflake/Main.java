@@ -24,6 +24,15 @@ public class Main extends JavaPlugin implements Listener, OnServerListen {
         this.bootstrap();
     }
 
+    @Override
+    public void onDisable() {
+        TunnelService tunnelService = this.context.getTunnelService();
+        if (tunnelService != null) {
+            tunnelService.stopObserver();
+            tunnelService.stopTunneling();
+        }
+    }
+
     private void bootstrap() {
         AuthenticateService authenticateService = this.context.getAuthenticateService();
         ConfigService configService = this.context.getConfigService();
@@ -31,18 +40,18 @@ public class Main extends JavaPlugin implements Listener, OnServerListen {
 
         ClientInfo clientInfo = configService.getClientInfo();
         if (clientInfo.getClientId().isEmpty() || clientInfo.getClientSecret().isEmpty()) {
-            getLogger().warning("Please enter your credentials in the config.yml file.");
+            getLogger().warning("config.yml 파일에 Waterflake Client 인증 정보를 입력해주세요.");
             return;
         }
 
         Tunnel tunnel = authenticateService.login(clientInfo);
         if (tunnel == null) {
-            getLogger().warning("Unable to log in to Waterflake.");
-            getLogger().warning("Make sure that the client information in the config.yml file is correct.");
+            getLogger().warning("Waterflake 에 로그인 할 수 없습니다.");
+            getLogger().warning("config.yml 파일의 인증 정보가 정확한지 다시 확인해주세요.");
             return;
         }
 
-        getLogger().info("Logged in. Wait for the server to start listening...");
+        getLogger().info("로그인 되었습니다. 서버가 활성화를 기다리는 중...");
         tunnelService.onServerListenEvent(this);
     }
 
@@ -52,23 +61,20 @@ public class Main extends JavaPlugin implements Listener, OnServerListen {
 
         ConfigService configService = this.context.getConfigService();
         int maxPlayers = configService.getMaxPlayers();
-        int serverPort = configService.getServerPort();
 
         if (maxPlayers > 75) {
             maxPlayers = 75;
-            getLogger().warning("Waterflake supports up to 75 players.");
-            getLogger().warning("The max-players setting in server.properties may not work properly.");
+            getLogger().warning("Waterflake 는 최대 75명의 플레이어를 지원합니다.");
+            getLogger().warning("server.properties 의 max-players 설정이 제대로 동작하지 않을 수 있습니다.");
         }
 
-//        for (int i = 0; i < maxPlayers; i++) {
-//            tunnelService.spawn(serverPort);
-//        }
-        tunnelService.startTunneling(3);
+        tunnelService.startObserver();
+        tunnelService.startTunneling(maxPlayers);
     }
 
     @Override
     public void timeout() {
-        getLogger().warning("Waterflake failed to connect to the game server.");
-        getLogger().warning("Please make sure that the server is hosted as localhost and that the plugin can connect.");
+        getLogger().warning("Waterflake 가 게임 서버에 연결하는데 너무 오랜 시간이 걸렸습니다.");
+        getLogger().warning("ip-address=127.0.0.1 옵션이 도움이 될 수 있습니다. 플러그인이 로컬 서버에 연결 할 수 있는지 네트워크 설정을 확인하세요.");
     }
 }
