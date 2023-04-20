@@ -31,8 +31,13 @@ public class TunnelService {
     }
 
     public void startTunneling(int tunnelCount) {
-        for (int i = 0; i < tunnelCount; i++) {
-           this.spawn();
+for (int i = 0; i < tunnelCount; i++) {
+            try {
+                Thread.sleep(100);
+            } catch(Exception ex) {}
+
+            this.context.getJavaPluginContext().getLogger().info("Spawn tunnel... ID: " + (i + 1));
+            this.spawn();
         }
     }
 
