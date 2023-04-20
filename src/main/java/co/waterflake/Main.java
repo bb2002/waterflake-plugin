@@ -81,7 +81,7 @@ public class Main extends JavaPlugin implements Listener, OnServerListen {
         tunnelService.startObserver();
         tunnelService.startTunneling(maxPlayers);
 
-        getLogger().info("터널링 성공! 연결 대상 도메인 -> " + tunnel.rootDomain + "." + tunnel.subDomain);
+        getLogger().info("터널링 성공! 연결 대상 도메인 -> " + tunnel.subDomain + "." + tunnel.rootDomain);
     }
 
     @Override
