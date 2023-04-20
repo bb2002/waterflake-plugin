@@ -47,7 +47,9 @@ public class AuthenticateService {
     }
 
     private Tunnel parsingLoginResult(String body) {
-        JsonObject jsonObject = JsonParser.parseString(body).getAsJsonObject();
+        JsonParser parser = new JsonParser();
+
+        JsonObject jsonObject = parser.parse(body).getAsJsonObject();
         JsonObject regionObject = jsonObject.getAsJsonObject("region");
 
         Region region = new Region();

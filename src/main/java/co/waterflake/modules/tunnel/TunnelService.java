@@ -31,7 +31,7 @@ public class TunnelService {
     }
 
     public void startTunneling(int tunnelCount) {
-for (int i = 0; i < tunnelCount; i++) {
+        for (int i = 0; i < tunnelCount; i++) {
             try {
                 Thread.sleep(100);
             } catch(Exception ex) {}
@@ -58,7 +58,9 @@ for (int i = 0; i < tunnelCount; i++) {
     }
 
     public void stopObserver() {
-        this.tunnelObserverThread.interrupt();
+        if (this.tunnelObserverThread != null) {
+            this.tunnelObserverThread.interrupt();
+        }
     }
 
     public void spawn() {

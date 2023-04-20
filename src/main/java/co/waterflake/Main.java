@@ -67,6 +67,7 @@ public class Main extends JavaPlugin implements Listener, OnServerListen {
     @Override
     public void successful() {
         TunnelService tunnelService = this.context.getTunnelService();
+        Tunnel tunnel = this.context.getAuthenticateService().getCurrentTunnel();
 
         ConfigService configService = this.context.getConfigService();
         int maxPlayers = configService.getMaxPlayers();
@@ -79,6 +80,8 @@ public class Main extends JavaPlugin implements Listener, OnServerListen {
 
         tunnelService.startObserver();
         tunnelService.startTunneling(maxPlayers);
+
+        getLogger().info("터널링 성공! 연결 대상 도메인 -> " + tunnel.rootDomain + "." + tunnel.subDomain);
     }
 
     @Override
